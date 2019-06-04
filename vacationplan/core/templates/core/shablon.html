@@ -1,0 +1,107 @@
+<html xmlns="http://www.w3.org/1999/html">
+
+<head>
+  <meta charset="utf-8">
+    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
+    <!--Добавить CSS-->
+    {% load staticfiles %}
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" type="text/css">
+    <!--добавить JS-->
+    {% block extrahead %}
+    <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+    {% endblock extrahead %}
+    <title>ИМТ</title>
+      <style>
+      .mystyle {
+         height: 300px;
+        }
+        .mybtn {
+         height: 100px;
+        }
+}
+       </style>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-8 col-lg-6">
+<br>
+            <div class="jumbotron center-block">
+                <h2><font size="7" face="Arial">Узнай свой индекс массы тела!</font></h2>
+            <br>
+                   <div class="row">
+                        <form method="POST">
+                            {% csrf_token %}
+                        <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
+                        <div class="form-group has-feedback">
+
+                            <input name="ves" title="Введите свой вес в кг" required="true" style="height: 100px; font-size: 30; font-family: Arial" class="form-control input-lg" placeholder="Вес в кг" value={{ ves }}>
+
+                        <span class="glyphicon form-control-feedback"></span>
+                        </div><br>
+
+                        <div class="form-group has-feedback">
+
+                            <input name="rost" title="Введите свой рост в см" required="true" style="height: 100px; font-size: 30; font-family: Arial" class="form-control input-lg" placeholder="Рост в см" value={{ rost }}>
+
+                            <span class="glyphicon form-control-feedback"></span>
+                        </div>
+                            <br>
+                            <button id="save" style="height: 150px; font-size: 30; font-family: Arial" class="btn btn-primary btn-block" type="submit" value="Считать"><span class="glyphicon glyphicon-ok" aria-hidden="true" ></span>СЧИТАТЬ</button>
+                            <br>
+                            <p><font size="6" face="Arial">{{ vashindexraventext }} <b>{{ message }}</b></font></p>
+
+                            <p><font size="6" face="Arial">{{ opisanie }}</font> <br> </p>
+                            <br>
+                        </div>
+                        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                           <img class="img-rounded center-block img-responsive" src={{ pic }}>
+                        </div>
+                        </form>
+                   </div>
+        </div><!--jumbotron-->
+        </div>
+        </div>
+ </div>
+</div><!--container-->
+
+
+<script>
+    $(function() {
+        //при нажатии на кнопку с id="save"
+        $('#save').click(function() {
+            //переменная formValid
+            var formValid = true;
+            //перебрать все элементы управления input
+            $('input').each(function() {
+                //найти предков, которые имеют класс .form-group, для установления success/error
+                var formGroup = $(this).parents('.form-group');
+                //найти glyphicon, который предназначен для показа иконки успеха или ошибки
+                var glyphicon = formGroup.find('.form-control-feedback');
+                //для валидации данных используем HTML5 функцию checkValidity
+                if (this.checkValidity()) {
+                    //добавить к formGroup класс .has-success, удалить has-error
+                    formGroup.addClass('has-success').removeClass('has-error');
+                    //добавить к glyphicon класс glyphicon-ok, удалить glyphicon-remove
+                    glyphicon.addClass('glyphicon-ok').removeClass('glyphicon-remove');
+                } else {
+                    //добавить к formGroup класс .has-error, удалить .has-success
+                    formGroup.addClass('has-error').removeClass('has-success');
+                    //добавить к glyphicon класс glyphicon-remove, удалить glyphicon-ok
+                    glyphicon.addClass('glyphicon-remove').removeClass('glyphicon-ok');
+                    //отметить форму как невалидную
+                    formValid = false;
+                }
+            });
+            //если форма валидна, то
+            if (formValid) {
+                 //отобразить сообщение об успехе
+                $('#success-alert').removeClass('hidden');
+                $('#success-alert').removeClass('hidden');
+            }
+        });
+    });
+</script>
+</body>
+</html>

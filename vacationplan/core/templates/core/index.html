@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <!--Добавить CSS-->
+    {% load staticfiles %}
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" type="text/css">
+    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
+    <!--добавить JS-->
+    {% block extrahead %}
+    <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+    {% endblock extrahead %}
+    <title>Планировщик</title>
+    <style>
+    .btnlink {
+    border:1px solid #ccc;
+    background:#eaeaea;
+    padding: .2em .75em;
+    text-decoration: none;
+    }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class=row">
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+    <form method="POST" action="create/">
+        {% csrf_token %}
+        <table>
+        {{ userform.as_p }}
+        </table>
+        <br>
+        <button id="save" style="font-family: Arial" class="btn"
+                type="submit"><span class="glyphicon glyphicon-plus"
+                                    aria-hidden="true"></span> Добавить отпуск</button>
+    </form>
+            </div>
+    <br>
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <!--{% if vacation.count > 0 %}-->
+    <h2>Список отпусков</h2>
+    <table class="table table-striped">
+        <tr>
+            <th >Id</th>
+            <th>ФИО</th>
+            <th>Начало отпуска</th>
+            <th>Дней</th>
+            <th>Конец отпуска</th>
+            <th>Действия</th>
+            <th>Пересекается с</th>
+        </tr>
+        {% for v in vacation %}
+        <tr>
+            {% if v.vac_status != "" %}
+            <td bgcolor="pink">{{ v.id }}</td>
+            <td bgcolor="pink">{{ v.employee|default_if_none:"nothing" }}</td>
+            <td bgcolor="pink">{{ v.vac_start|date:"d M Y (D)" }}</td>
+            <td bgcolor="pink">{{ v.vac_dur }}</td>
+            <td bgcolor="pink">{{ v.vac_end|date:"d M Y (D)" }}</td>
+            <td bgcolor="pink"><a href="edit/{{v.id}}" class="btnlink">Изменить</a> <a href="delete/{{v.id}}" class="btnlink">Удалить</a></td>
+            <td bgcolor="pink">{{ v.vac_status }}</td>
+
+            {% else %}
+            <td bgcolor="77dd77">{{ v.id }}</td>
+            <td bgcolor="77dd77">{{ v.employee|default_if_none:"nothing" }}</td>
+            <td bgcolor="77dd77">{{ v.vac_start|date:"d M Y (D)" }}</td>
+            <td bgcolor="77dd77">{{ v.vac_dur }}</td>
+            <td bgcolor="77dd77">{{ v.vac_end|date:"d M Y (D)" }}</td>
+            <td bgcolor="77dd77"><a href="edit/{{v.id}}" class="btnlink">Изменить</a> <a href="delete/{{v.id}}" class="btnlink">Удалить</a></td>
+            <td bgcolor="77dd77">{{ v.vac_status }}</td>
+            {% endif %}
+
+
+        </tr>
+        {% endfor %}
+
+    </table>
+    <!--{% endif %}-->
+<p> Пересечений отпусков: {{ result }} </p>
+{{ calendar_year|safe }}
+    </div>
+</div>
+            </div>
+
+</body>
+</html>
