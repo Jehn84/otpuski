@@ -10,7 +10,7 @@ import calendar
 def index(request):
     c = calendar.HTMLCalendar()
     calendar_year = c.formatyearpage(datetime.today().year, width=3, css='calendar.css', encoding=None)
-    result = 0  #переменная для кол-ва пересечений отпусков
+    result = 0  #переменная для кол-ва пересечений отпусков1
     userform = UserForm()
     vacation = Vacation.objects.all()
     for v1 in vacation: #вложенный цикл проверки
